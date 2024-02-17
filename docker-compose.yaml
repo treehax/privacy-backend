@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  fastapi_app:
+    build: .
+    volumes:
+      - .:/privacy-backend
+    command: uvicorn privacy-backend.main:app --host 0.0.0.0 --reload
+    ports:
+      - "8000:8000"
+    networks:
+      - app_network
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yaml"
+    volumes:
+      - ./ngrok.yaml:/etc/ngrok.yaml
+    ports:
+      - 4040:4040
+    depends_on:
+      - fastapi_app
+
+networks:
+  app_network:
+    driver: bridge
