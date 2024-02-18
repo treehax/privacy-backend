@@ -2,5 +2,5 @@ version: 2
 authtoken: 2cVnqzLm0bIEzqAfROhoFR2ncvd_3opPvCb92nHTntkDvSX5N
 tunnels:
   fastapi:
-    addr: host.docker.internal:8000
+    addr: host.docker.internal:8001
     proto: http

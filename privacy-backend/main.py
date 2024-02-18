@@ -3,12 +3,13 @@ from fastapi import FastAPI
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import os
+import csv
 import json
 import httpx
 
 
-# GPT_MODEL = "gpt-4-0125-preview"
-GPT_MODEL = "gpt-3.5-turbo-0125"
+GPT_MODEL = "gpt-4-0125-preview"
+# GPT_MODEL = "gpt-3.5-turbo-0125"
 
 load_dotenv()
 app = FastAPI()
@@ -99,6 +100,14 @@ class UncensoringRequest(BaseModel):
     censoring_dict: dict
 
 
+class BarePrompt(BaseModel):
+    bare_prompt: str
+
+
+class VerifyPrompt(BaseModel):
+    prompt: str
+
+
 def parse_censoring_dictionary(censoring_dict_str: str) -> dict:
     try:
         # Attempt to parse the JSON string into a dictionary
@@ -153,8 +162,8 @@ async def root():
 
 
 @app.post("/ai")
-async def bare_prompt(model: str, prompt: Prompt):
-    completion = send_prompt_to_openai(prompt.insecure_prompt)
+async def bare_prompt(prompt: BarePrompt):
+    completion = send_prompt_to_openai(prompt.bare_prompt)
     completion.choices[0].message
     return {"message": completion.choices[0].message}
 
@@ -170,10 +179,20 @@ async def get_censorships_from_prompt(prompt: Prompt):
 
     response = httpx.get(url, params=params)
     json = response.json()
-    response = json.get("proof")
+    proofs = json.get("proof")
 
-    with open("proofs.txt", "a") as f:
-        f.write(str(response))
+    encrypted_prompt = prompt.insecure_prompt
+    for key in censoring_dict.keys():
+        encrypted_prompt = encrypted_prompt.replace(key, censoring_dict[key])
+
+    with open("proofs.csv", newline="", mode="a", encoding="utf-8") as file:
+        data_to_write = [
+            encrypted_prompt,
+            ",".join(map(str, proofs)),
+            "Not run yet",
+        ]
+        writer = csv.writer(file)
+        writer.writerow(data_to_write)
 
     return censoring_dict
 
@@ -196,3 +215,85 @@ async def uncensor_prompt(uncensoring_request: UncensoringRequest):
     )
 
     return completion.choices[0].message.content
+
+
+@app.get("/ai/history")
+async def get_chat_history():
+    return {
+        "history": [
+            {
+                "sanitized_prompt": "Write an email telling Rob he has HPV",
+                "proofs": [123, 456, 789],
+                "proven": True,
+            },
+            {
+                "sanitized_prompt": "Write python "
+                "code that connects to the OpenAI API with my API key sk_123abc123",
+                "proofs": [123, 456, 789],
+                "proven": True,
+            },
+            {
+                "sanitized_prompt": "My patient name=John Doe is 5'11 and has a BMI of 28, with a diagnosis of hypertension. Write a formal note for the insurance company",
+                "proofs": [123, 456, 789],
+                "proven": False,
+            },
+        ],
+    }
+
+
+def find_row_by_first_column(file_path, match_string):
+    with open(file_path, mode="r", encoding="utf-8") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == match_string:
+                return row  # Return the matching row immediately
+    return None  # Return None if no match is found
+
+
+def modify_csv_row(file_path, match_string, new_value):
+    # Temporary list to hold modified data
+    modified_data = []
+    # Flag to check if a row has been modified
+    row_modified = False
+
+    # Read the original data and modify the matching row
+    with open(file_path, mode="r", encoding="utf-8") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row[0] == match_string:
+                row[-1] = new_value
+                row_modified = True
+            modified_data.append(row)
+
+    # Write the modified data back if a row was modified
+    if row_modified:
+        with open(file_path, mode="w", newline="", encoding="utf-8") as file:
+            writer = csv.writer(file)
+            writer.writerows(modified_data)
+    else:
+        print("No matching row found.")
+
+
+@app.post("/ai/prove")
+async def prove_prompt(request: VerifyPrompt):
+
+    row = find_row_by_first_column("proofs.csv", request.prompt)
+    proof = [int(item) for item in row[1].split(",")]
+    proof = str(proof).replace("[", "").replace("]", "").replace(" ", "")
+
+    concatenated_words = ",".join(request.prompt.split(" "))
+
+    with open("debug_log.txt", "a") as f:
+        f.write("\n\n" + concatenated_words + "\n" + str(proof) + "\n")
+
+    url = "https://zkp4llms.pythonanywhere.com/verifys"
+    params = {
+        "word": concatenated_words,
+        "proof": proof,
+    }
+
+    response = httpx.get(url, params=params)
+    json = response.json()
+    proved = json.get("verify")
+
+    modify_csv_row("proofs.csv", request.prompt, str(proved))
