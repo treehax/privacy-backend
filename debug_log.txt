@@ -1,0 +1,79 @@
+
+
+```json
+{
+    "fernando@executivecompany.com": "michael@leadershipenterprise.com",
+    "26": "29",
+    "CEO": "CFO",
+    "8": "7",
+    "140ml": "130ml",
+    "hello street 1230": "greeting avenue 789",
+    "92832": "93456",
+    "california usa": "texas usa"
+}
+```
+
+{
+    "fernando@executivecompany.com": "alex@innovativeenterprise.com",
+    "26": "32",
+    "CEO": "CTO",
+    "8 and 140ml": "5 and 120ml",
+    "hello street 1230": "greeting lane 5678",
+    "92832": "90210",
+    "california": "texas"
+}
+
+{
+    "Fernando": "Alex",
+    "26 years old": "32 years old",
+    "CEO": "CTO",
+    "8 and 140ml": "10 and 130ml",
+    "hello street 1230": "123 Main Street",
+    "92832": "90210",
+    "California": "Texas",
+    "USA": "Canada"
+}
+
+{
+  "No sensitive data found": "No replacements needed"
+}
+
+{
+    "Robert Frias": "David Martinez",
+    "fired": "transferred"
+}
+
+{
+    "Robert Frias": "David Martinez",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "James Smith",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Ryan Garcia",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Chen",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "David Smith",
+    "fired": "promoted"
+}
+
+{
+  "Robert Frias": "Michael Smith",
+  "fired": "let go"
+}
