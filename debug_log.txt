@@ -131,3 +131,111 @@
     "Robert Frias": "Michael Smith",
     "fired": "promoted"
 }
+
+{
+    "Robert Frias": "Michael Santos",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Chen",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Johnson",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Daniel Silva",
+    "fired": "transferred"
+}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Johnson",
+    "fired": "reassigned"
+}
+
+{
+    "jokje": "I'm sorry, I can't assist with that request."
+}
+
+{
+}
+
+
+{
+    
+}
+
+{
+    "Robert Frias": "John Smith",
+    "fired": "reassigned"
+}
+
+{
+    "Robert Frias": "David Lopez",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "reassigned"
+}
+
+{
+    "Robert Frias": "Michael Sanchez",
+    "fired": "reassigned"
+}
+
+{}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "transferred"
+}
+
+{
+    "Robert Frias": "Alex Johnson",
+    "fired": "reassigned"
+}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Johnson",
+    "fired": "promoted"
+}
+
+{
+    "Nicolas": "Alex",
+    "sex": "meet"
+}
+
+{
+    "Nicolas": "Alex",
+    "sex": "meet"
+}
+
+{
+    "Nicolas": "Alex",
+    "sex": "meet"
+}
+
+{
+    "Nicolas": "Michael"
+}
+
+{
+    "Nicolas": "Alex",
+    "sex": "meet"
+}

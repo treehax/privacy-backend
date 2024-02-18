@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from pydantic import BaseModel
 import os
 import json
+import httpx
 
 
 # GPT_MODEL = "gpt-4-0125-preview"
@@ -161,6 +162,19 @@ async def bare_prompt(model: str, prompt: Prompt):
 @app.post("/ai/replacement")
 async def get_censorships_from_prompt(prompt: Prompt):
     censoring_dict = get_censoring_dictionary(prompt.insecure_prompt)
+
+    batch = ",".join(censoring_dict.keys())
+
+    url = "https://zkp4llms.pythonanywhere.com/proofs"
+    params = {"word": batch}
+
+    response = httpx.get(url, params=params)
+    json = response.json()
+    response = json.get("proof")
+
+    with open("proofs.txt", "a") as f:
+        f.write(str(response))
+
     return censoring_dict
 
 
