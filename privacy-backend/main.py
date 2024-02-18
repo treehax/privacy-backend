@@ -6,6 +6,9 @@ import os
 import json
 
 
+# GPT_MODEL = "gpt-4-0125-preview"
+GPT_MODEL = "gpt-3.5-turbo-0125"
+
 load_dotenv()
 app = FastAPI()
 
@@ -26,7 +29,7 @@ BAD:
 GOOD:
 {{
   "word_a": "replacement_a"
-}
+}}
 
 Eg:
 
@@ -90,7 +93,7 @@ class Prompt(BaseModel):
     insecure_prompt: str
 
 
-class UncensoringPrompt(BaseModel):
+class UncensoringRequest(BaseModel):
     censored_prompt: str
     censoring_dict: dict
 
@@ -108,7 +111,7 @@ def get_censoring_dictionary(prompt: str):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     completion = client.chat.completions.create(
-        model="gpt-4-0125-preview",
+        model=GPT_MODEL,
         messages=[
             {
                 "role": "user",
@@ -128,7 +131,7 @@ def send_prompt_to_openai(prompt: str):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     completion = client.chat.completions.create(
-        model="gpt-4-0125-preview",
+        model=GPT_MODEL,
         messages=[
             {
                 "role": "system",
@@ -162,17 +165,17 @@ async def get_censorships_from_prompt(prompt: Prompt):
 
 
 @app.post("/ai/uncensor")
-async def uncensor_prompt(uncensoring_prompt: UncensoringPrompt):
+async def uncensor_prompt(uncensoring_request: UncensoringRequest):
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
     completion = client.chat.completions.create(
-        model="gpt-4-0125-preview",
+        model=GPT_MODEL,
         messages=[
             {
                 "role": "user",
-                "content": uncensoring_prompt(
-                    uncensoring_prompt.censored_prompt,
-                    uncensoring_prompt.censoring_dict,
+                "content": uncensoring_prompt.format(
+                    censored_prompt=uncensoring_request.censored_prompt,
+                    censoring_dict=str(uncensoring_request.censoring_dict),
                 ),
             }
         ],

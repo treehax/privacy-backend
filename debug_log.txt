@@ -77,3 +77,57 @@
   "Robert Frias": "Michael Smith",
   "fired": "let go"
 }
+
+{
+  "text": "John's username is johndoe123 and his password is securepass123.",
+  "replacements": {
+    "johndoe123": "janedoe456",
+    "securepass123": "StrongPassword789"
+  }
+}
+
+{
+    "Robert Frias": "Michael Sanchez",
+    "fired": "promoted"
+}
+
+{
+    "Fernando": "Alex",
+    "26 years old": "32 years old",
+    "CEO": "CFO",
+    "8 and 140ml": "10 and 120ml",
+    "hello street 1230": "xyz avenue 456",
+    "zip code 92832": "zip code 93123",
+    "California": "Texas",
+    "fernando@executivecompany.com": "alex@corporatecompany.com"
+}
+
+{
+    "Robert Frias": "Michael Johnson",
+    "fired": "transitioned to a new role"
+}
+
+{
+    "Robert Frias": "Michael Chen",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Alex Smith",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Daniel Garcia",
+    "fired": "promoted"
+}
+
+{
+    "Robert Frias": "Michael Smith",
+    "fired": "promoted"
+}
