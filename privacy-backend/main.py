@@ -219,26 +219,24 @@ async def uncensor_prompt(uncensoring_request: UncensoringRequest):
 
 @app.get("/ai/history")
 async def get_chat_history():
-    return {
-        "history": [
-            {
-                "sanitized_prompt": "Write an email telling Rob he has HPV",
-                "proofs": [123, 456, 789],
-                "proven": True,
-            },
-            {
-                "sanitized_prompt": "Write python "
-                "code that connects to the OpenAI API with my API key sk_123abc123",
-                "proofs": [123, 456, 789],
-                "proven": True,
-            },
-            {
-                "sanitized_prompt": "My patient name=John Doe is 5'11 and has a BMI of 28, with a diagnosis of hypertension. Write a formal note for the insurance company",
-                "proofs": [123, 456, 789],
-                "proven": False,
-            },
-        ],
-    }
+    data = {"history": []}
+    with open("proofs.csv", newline="") as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            sanitized_prompt = row[0]
+            proofs = row[1].split(",")  # Split the proofs string into a list
+            proofs = [
+                int(proof) for proof in proofs
+            ]  # Convert each proof to an integer
+            proven = row[2]
+            data["history"].append(
+                {
+                    "sanitized_prompt": sanitized_prompt,
+                    "proofs": proofs,
+                    "proven": proven,
+                }
+            )
+    return data
 
 
 def find_row_by_first_column(file_path, match_string):
@@ -291,6 +289,9 @@ async def prove_prompt(request: VerifyPrompt):
         "word": concatenated_words,
         "proof": proof,
     }
+
+    with open("debug_log.txt", "a") as f:
+        f.write("\n\n" + url + "\n" + str(params) + "\n")
 
     response = httpx.get(url, params=params)
     json = response.json()
